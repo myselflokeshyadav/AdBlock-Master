@@ -17,6 +17,7 @@
 
 @implementation AboutViewController{
     NSArray *titArr,*selArr;
+    NSInteger index;
 }
 
 - (void)viewDidLoad {
@@ -25,13 +26,10 @@
     
     titArr = @[@{@"title":@"What is AdBlock?",@"word":@"AdBlock is a free extension that lets you customize your web experience. You can block annoying ads, prevent tracking, and more."},
                      @{@"title":@"How does AdBlock work?",@"word":@"Select what you want to see while browsing the web, and use filters to block elements you don't want to see, such as ads or tracking."},
-                     @{@"title":@"What is a filter list?",@"word":@"A filter list is a set of rules that tell your browser which elements to block. You can mask a small or most of the elements as needed. You can choose from a pre-made external maintenance filter list or create your own filter list. Almost all pre-made filter lists are created, published, and maintained by users based on open source licenses.\nMany ads have built-in tracking programs, and some even contain malware. Therefore, AdBlock provides a certain level of tracking and malware protection by default. If needed, you can add additional tracking and malware filtering lists to increase the level of protection."},
-                     @{@"title":@"Blacklist ad",@"word":@"This filter list can block ads based on your browser language settings (such as EasyList)."},
-                     @{@"title":@"Who is behind the AdBlock?",@"word":@"We are a small team of developers and support staff, relying entirely on your support for AdBlock maintenance and development. We are proud of what we produce and we thank every user. We continue to listen to user feedback and continue to roll out new versions of AdBlock. We are committed to making it the best tool for web content blocking."},
-                     @{@"title":@"Is our information safe?",@"word":@"Your browser may require AdBlock to request access to your browsing data so that it can work in all tabs in the browser. AdBlock will not save or retrieve your personal browsing habits for any reason other than to make the program work. Or information. AdBlock relies entirely on donations and support to users like you, and does not collect any information for advertising or promotional purposes."},
-                     @{@"title":@"How can I help AdBlock?",@"word":@"You can support our work by donating. You can also introduce others to use AdBlock."}];
+                     @{@"title":@"What is a filter list?",@"word":@"A filter list is a set of rules that tell your browser which elements to block. You can mask a small or most of the elements as needed. You can choose from a pre-made external maintenance filter list or create your own filter list. Almost all pre-made filter lists are created, published, and maintained by users based on open source licenses.Many ads have built-in tracking programs, and some even contain malware. Therefore, AdBlock provides a certain level of tracking and malware protection by default. If needed, you can add additional tracking and malware filtering lists to increase the level of protection."},
+                     @{@"title":@"Blacklist ad",@"word":@"This filter list can block ads based on your browser language settings (such as EasyList)."}];
     
-    selArr = @[@"0",@"0",@"0",@"0",@"0",@"0",@"0"];
+    selArr = @[@"0",@"0",@"0",@"0"];
     
     [self CreatTableView];
 
@@ -52,11 +50,21 @@
     _tableView.estimatedRowHeight = 0;
     _tableView.estimatedSectionHeaderHeight = 0;
     _tableView.estimatedSectionFooterHeight = 0;
-    _tableView.backgroundColor = [UIColor colorWithHexString:@"24384A"];
+    _tableView.backgroundColor = [UIColor colorWithHexString:@"#1A3867"];
     [self.view addSubview:_tableView];
+    _tableView.bounces = NO;
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([AboutTableViewCell class])
-                                           bundle:nil]forCellReuseIdentifier:@"AboutTableViewCell"];
+    [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([AboutTableViewCell class]) bundle:nil]forCellReuseIdentifier:@"AboutTableViewCell"];
+    
+    //表格头视图
+    UIView *headV = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 30)];
+    _tableView.tableHeaderView = headV;
+    
+    UILabel *headLab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, kDeviceWidth, 30)];
+    [headV addSubview:headLab];
+    headLab.text = @"About Unlimited Adblock";
+    headLab.textColor = [UIColor lightGrayColor];
+    headLab.font = [UIFont systemFontOfSize:14];
 }
 
 #pragma mark --TableViewDelegate
@@ -72,7 +80,10 @@
     return [self heightForString:[dic objectForKey:@"word"] fontSize:17 andWidth:kDeviceWidth-30];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 60;
+    if(section==4){
+        return 75;
+    }
+    return 45;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
     return 0.01f;
@@ -81,18 +92,66 @@
     
     NSDictionary *dic = titArr[section];
     
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 60)];
-    view.backgroundColor = [UIColor colorWithHexString:@"24384A"];
-    UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, kDeviceWidth, 60)];
-    lab.text = [dic objectForKey:@"title"];
-    lab.textColor = [UIColor whiteColor];
-    [view addSubview:lab];
+    if(section==4){
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 75)];
+        view.backgroundColor = [UIColor colorWithHexString:@"#1A3867"];
+        
+        UILabel *titLab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, kDeviceWidth, 30)];
+        titLab.text = @"App";
+        titLab.textColor = [UIColor lightGrayColor];
+        titLab.font = [UIFont systemFontOfSize:14];
+        [view addSubview:titLab];
+        
+        UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 30, kDeviceWidth, 45)];
+        lab.text = [dic objectForKey:@"title"];
+        lab.textColor = [UIColor whiteColor];
+        [view addSubview:lab];
+        
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 75)];
+        [view addSubview:btn];
+        [btn addTarget:self action:@selector(selectorTitView:) forControlEvents:UIControlEventTouchUpInside];
+        btn.tag = 100+section;
+        return view;
+    }else{
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 45)];
+        view.backgroundColor = [UIColor colorWithHexString:@"#1A3867"];
+        
+        UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(15, 0, kDeviceWidth, 45)];
+        lab.text = [dic objectForKey:@"title"];
+        lab.textColor = [UIColor whiteColor];
+        [view addSubview:lab];
+        
+        if(section==6){
+            
+            UILabel *vlab = [[UILabel alloc] initWithFrame:CGRectMake(kDeviceWidth-40, 0, 40, 45)];
+            vlab.textColor = [UIColor lightGrayColor];
+            vlab.text = @"1.0";
+            [view addSubview:vlab];
+            vlab.font = [UIFont systemFontOfSize:14];
+        }
+        
+        UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 45)];
+        [view addSubview:btn];
+        [btn setImage:[UIImage imageNamed:@"arrowdown.png"] forState:UIControlStateNormal];
+        [btn setImageEdgeInsets:UIEdgeInsetsMake(5, (kDeviceWidth - 35), 5, 5)]; // SET the values for your wishes
+        [btn addTarget:self action:@selector(selectorTitView:) forControlEvents:UIControlEventTouchUpInside];
+        btn.tag = 100+section;
+        
+        NSMutableArray *mArr = [NSMutableArray arrayWithArray:selArr];
+        if([mArr[index] integerValue]==1){
+            [btn setImage:[UIImage imageNamed:@"arrowup.png"] forState:UIControlStateNormal];
+
+        }else{
+            [btn setImage:[UIImage imageNamed:@"arrowdown.png"] forState:UIControlStateNormal];
+
+        }
+
+
+        
+        return view;
+    }
     
-    UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kDeviceWidth, 60)];
-    [view addSubview:btn];
-    [btn addTarget:self action:@selector(selectorTitView:) forControlEvents:UIControlEventTouchUpInside];
-    btn.tag = 100+section;
-    return view;
+    
     
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -109,17 +168,26 @@
 #pragma mark --点击title
 - (void)selectorTitView:(UIButton *)btn{
     
-    NSInteger index = btn.tag-100;
-    NSMutableArray *mArr = [NSMutableArray arrayWithArray:selArr];
-    if([mArr[index] integerValue]==0){
-        [mArr replaceObjectAtIndex:index withObject:@"1"];
+    index = btn.tag-100;
+    if(index==4 || index==5 || index==6){
+
+        
     }else{
-        [mArr replaceObjectAtIndex:index withObject:@"0"];
+        NSMutableArray *mArr = [NSMutableArray arrayWithArray:selArr];
+        if([mArr[index] integerValue]==0){
+            [mArr replaceObjectAtIndex:index withObject:@"1"];
+
+        }else{
+            [mArr replaceObjectAtIndex:index withObject:@"0"];
+
+        }
+        selArr = mArr;
+        
+        NSIndexSet *indexSet=[[NSIndexSet alloc]initWithIndex:index];
+
+        [_tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
     }
-    selArr = mArr;
     
-    NSIndexSet *indexSet=[[NSIndexSet alloc]initWithIndex:index];
-    [_tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
     
 }
 
@@ -132,4 +200,20 @@
     //此处的换行类型（lineBreakMode）可根据自己的实际情况进行设置
     return sizeToFit.height + 16.0;
 }
+
+//分享
+- (void)ShareTheApp{
+    NSString *textToShare = @"西风";
+    NSURL *urlToShare = [NSURL URLWithString:[NSString stringWithFormat:@"https://itunes.apple.com/cn/app/id%@?mt=8",AppID]];
+    NSArray *activityItems = @[textToShare,urlToShare];
+    UIActivityViewController *vc = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+    vc.excludedActivityTypes = @[UIActivityTypeAirDrop,UIActivityTypeMessage];
+    UIActivityViewControllerCompletionWithItemsHandler myBlock = ^(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+        [vc dismissViewControllerAnimated:YES completion:nil];
+    };
+    vc.completionWithItemsHandler = myBlock;
+    vc.popoverPresentationController.sourceView = self.view;
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
 @end

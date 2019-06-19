@@ -39,6 +39,7 @@
             <connections>
                 <outlet property="wordLab" destination="49K-yP-C10" id="ikf-z5-cUi"/>
             </connections>
+            <point key="canvasLocation" x="-275" y="5"/>
         </tableViewCell>
     </objects>
 </document>

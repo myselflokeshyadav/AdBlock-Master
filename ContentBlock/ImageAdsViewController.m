@@ -78,7 +78,8 @@
 }
 
 - (void)getData:(NSURL *)url completion:(void(^)(NSData *, NSURLResponse*, NSError*))completion {
-    [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:completion];
+    [[[NSURLSession sharedSession]dataTaskWithURL:url completionHandler:completion] resume];
+   // [[NSURLSession sharedSession] dataTaskWithURL:url completionHandler:completion];
 }
 
 
@@ -88,7 +89,7 @@
             if(@available(iOS 10.0, *))
                 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_adsModel.url] options:@{} completionHandler:nil];
             else
-                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_adsModel.url]];
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:_adsModel.url] options:@{} completionHandler:nil];
         }
     }
 }

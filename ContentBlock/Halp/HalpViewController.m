@@ -20,6 +20,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor colorWithHexString:@"#1A3867"];
+
     // Do any additional setup after loading the view from its nib.
     [self CreatTableView];
 }
@@ -37,7 +39,7 @@
     _tableView.estimatedRowHeight = 0;
     _tableView.estimatedSectionHeaderHeight = 0;
     _tableView.estimatedSectionFooterHeight = 0;
-    _tableView.backgroundColor = [UIColor colorWithHexString:@"24384A"];
+    _tableView.backgroundColor = [UIColor colorWithHexString:@"#1A3867"];
     [self.view addSubview:_tableView];
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [_tableView registerNib:[UINib nibWithNibName:NSStringFromClass([HalpTableViewCell class])
@@ -50,7 +52,7 @@
     return 1;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 940;
+    return 1002;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 0.01f;
